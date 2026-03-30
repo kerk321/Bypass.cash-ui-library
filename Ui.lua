@@ -134,9 +134,9 @@ function Bypass:GetResponsiveWindowBounds(profile)
 
     local marginX = profile.isPhone and 20 or 90
     local marginY = profile.isPhone and 28 or 100
-    local rawMaxWidth = math.min(math.max(180, math.floor(profile.viewport.X - marginX)), 300)
+    local rawMaxWidth = math.min(math.max(240, math.floor(profile.viewport.X - marginX)), 360)
     local rawMaxHeight = math.max(320, math.floor(profile.viewport.Y - marginY))
-    local minWidth = math.min(profile.isPhone and 180 or 180, rawMaxWidth)
+    local minWidth = math.min(profile.isPhone and 240 or 240, rawMaxWidth)
     local minHeight = math.min(profile.isPhone and 370 or 370, rawMaxHeight)
 
     return {
@@ -150,7 +150,7 @@ function Bypass:GetResponsiveWindowSize(requestedSize)
     local bounds = self:GetResponsiveWindowBounds(profile)
     local requestedWidth = requestedSize and requestedSize.X.Offset or 0
     local requestedHeight = requestedSize and requestedSize.Y.Offset or 0
-    local baseWidth = profile.isPhone and 180 or 180
+    local baseWidth = profile.isPhone and 240 or 240
     local baseHeight = profile.isPhone and 370 or 370
     local width = math.clamp(requestedWidth > 0 and requestedWidth or baseWidth, bounds.min.X, bounds.max.X)
     local height = math.clamp(requestedHeight > 0 and requestedHeight or baseHeight, bounds.min.Y, bounds.max.Y)
@@ -383,17 +383,17 @@ function Bypass:Window(properties)
 
     Items.LogoText = Bypass:Create("TextLabel", {
         Parent = Items.Header, Text = Cfg.Title, TextColor3 = themes.preset.text,
-        AnchorPoint = vec2(0.5, 0), Position = dim2(0.5, 0, 0, 8), 
-        Size = dim2(0, 200, 0, 14),
-        BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold), TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 4
+        AnchorPoint = vec2(0, 0), Position = dim2(0, 10, 0, 6), 
+        Size = dim2(0, 140, 0, 14),
+        BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold), TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 4
     })
     Bypass:Themify(Items.LogoText, "text", "TextColor3")
 
     Items.SubLogoText = Bypass:Create("TextLabel", {
         Parent = Items.Header, Text = Cfg.Subtitle, TextColor3 = themes.preset.subtext,
-        AnchorPoint = vec2(0.5, 0), Position = dim2(0.5, 0, 0, 24), 
-        Size = dim2(0, 200, 0, 10),
-        BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextSize = 9, TextXAlignment = Enum.TextXAlignment.Center, ZIndex = 4
+        AnchorPoint = vec2(0, 0), Position = dim2(0, 10, 0, 22), 
+        Size = dim2(0, 140, 0, 10),
+        BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextSize = 9, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 4
     })
     Bypass:Themify(Items.SubLogoText, "subtext", "TextColor3")
 
@@ -476,8 +476,8 @@ function Bypass:Window(properties)
     Bypass:Themify(Items.Username, "text", "TextColor3")
 
     Items.Status = Bypass:Create("TextLabel", {
-        Parent = Items.RightInfo, Text = "Status: Premium", TextColor3 = themes.preset.subtext,
-        AnchorPoint = vec2(1, 0), Position = dim2(1, -36, 0, 16), Size = dim2(0, 80, 0, 8),
+        Parent = Items.Header, Text = "Status: Premium", TextColor3 = themes.preset.subtext,
+        AnchorPoint = vec2(1, 0), Position = dim2(1, -8, 0, 6), Size = dim2(0, 90, 0, 10),
         BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextSize = 8, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 6
     })
     Bypass:Themify(Items.Status, "subtext", "TextColor3")
