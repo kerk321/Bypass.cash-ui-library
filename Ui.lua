@@ -134,9 +134,9 @@ function Bypass:GetResponsiveWindowBounds(profile)
 
     local marginX = profile.isPhone and 20 or 90
     local marginY = profile.isPhone and 28 or 100
-    local rawMaxWidth = math.max(300, math.floor(profile.viewport.X - marginX))
+    local rawMaxWidth = math.min(math.max(180, math.floor(profile.viewport.X - marginX)), 300)
     local rawMaxHeight = math.max(320, math.floor(profile.viewport.Y - marginY))
-    local minWidth = math.min(profile.isPhone and 220 or 220, rawMaxWidth)
+    local minWidth = math.min(profile.isPhone and 180 or 180, rawMaxWidth)
     local minHeight = math.min(profile.isPhone and 370 or 370, rawMaxHeight)
 
     return {
@@ -150,7 +150,7 @@ function Bypass:GetResponsiveWindowSize(requestedSize)
     local bounds = self:GetResponsiveWindowBounds(profile)
     local requestedWidth = requestedSize and requestedSize.X.Offset or 0
     local requestedHeight = requestedSize and requestedSize.Y.Offset or 0
-    local baseWidth = profile.isPhone and 220 or 220
+    local baseWidth = profile.isPhone and 180 or 180
     local baseHeight = profile.isPhone and 370 or 370
     local width = math.clamp(requestedWidth > 0 and requestedWidth or baseWidth, bounds.min.X, bounds.max.X)
     local height = math.clamp(requestedHeight > 0 and requestedHeight or baseHeight, bounds.min.Y, bounds.max.Y)
@@ -563,7 +563,7 @@ function Bypass:Window(properties)
     Bypass:Themify(Bypass:Create("UIStroke", { Parent = ToggleButton, Color = themes.preset.outline, Thickness = 1.5 }), "outline", "Color")
 
     ToggleButton.MouseButton1Click:Connect(function()
-        Cfg.ToggleMenu(true)
+        Cfg.ToggleMenu()
     end)
 
     -- Minimize and close button handlers removed
