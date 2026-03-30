@@ -132,12 +132,21 @@ end
 function Bypass:GetResponsiveWindowBounds(profile)
     profile = profile or self:GetDeviceProfile()
 
-    local marginX = profile.isPhone and 20 or 90
     local marginY = profile.isPhone and 28 or 100
-    local rawMaxWidth = math.min(math.max(240, math.floor(profile.viewport.X - marginX)), 360)
     local rawMaxHeight = math.max(320, math.floor(profile.viewport.Y - marginY))
-    local minWidth = math.min(profile.isPhone and 240 or 240, rawMaxWidth)
     local minHeight = math.min(profile.isPhone and 370 or 370, rawMaxHeight)
+
+    local rawMaxWidth, minWidth
+    if profile.isPhone then
+        rawMaxWidth = math.floor(profile.viewport.X * 0.88)
+        minWidth    = math.floor(profile.viewport.X * 0.82)
+    elseif profile.isTablet then
+        rawMaxWidth = math.floor(profile.viewport.X * 0.72)
+        minWidth    = math.floor(profile.viewport.X * 0.65)
+    else
+        rawMaxWidth = math.min(math.floor(profile.viewport.X * 0.50), 600)
+        minWidth    = math.max(math.floor(profile.viewport.X * 0.38), 400)
+    end
 
     return {
         min = vec2(minWidth, minHeight),
@@ -150,8 +159,15 @@ function Bypass:GetResponsiveWindowSize(requestedSize)
     local bounds = self:GetResponsiveWindowBounds(profile)
     local requestedWidth = requestedSize and requestedSize.X.Offset or 0
     local requestedHeight = requestedSize and requestedSize.Y.Offset or 0
-    local baseWidth = profile.isPhone and 240 or 240
-    local baseHeight = profile.isPhone and 370 or 370
+    local baseWidth
+    if profile.isPhone then
+        baseWidth = math.floor(profile.viewport.X * 0.85)
+    elseif profile.isTablet then
+        baseWidth = math.floor(profile.viewport.X * 0.68)
+    else
+        baseWidth = math.max(math.floor(profile.viewport.X * 0.42), 420)
+    end
+    local baseHeight = profile.isPhone and 370 or 400
     local width = math.clamp(requestedWidth > 0 and requestedWidth or baseWidth, bounds.min.X, bounds.max.X)
     local height = math.clamp(requestedHeight > 0 and requestedHeight or baseHeight, bounds.min.Y, bounds.max.Y)
 
