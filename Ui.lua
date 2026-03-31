@@ -138,14 +138,14 @@ function Bypass:GetResponsiveWindowBounds(profile)
 
     local rawMaxWidth, minWidth
     if profile.isPhone then
-        rawMaxWidth = math.floor(profile.viewport.X * 0.88)
-        minWidth    = math.floor(profile.viewport.X * 0.82)
+        rawMaxWidth = math.floor(profile.viewport.X * 0.78)
+        minWidth    = math.floor(profile.viewport.X * 0.72)
     elseif profile.isTablet then
-        rawMaxWidth = math.floor(profile.viewport.X * 0.72)
-        minWidth    = math.floor(profile.viewport.X * 0.65)
+        rawMaxWidth = math.floor(profile.viewport.X * 0.60)
+        minWidth    = math.floor(profile.viewport.X * 0.54)
     else
-        rawMaxWidth = math.min(math.floor(profile.viewport.X * 0.50), 600)
-        minWidth    = math.max(math.floor(profile.viewport.X * 0.38), 400)
+        rawMaxWidth = math.min(math.floor(profile.viewport.X * 0.42), 520)
+        minWidth    = math.max(math.floor(profile.viewport.X * 0.30), 340)
     end
 
     return {
@@ -161,11 +161,11 @@ function Bypass:GetResponsiveWindowSize(requestedSize)
     local requestedHeight = requestedSize and requestedSize.Y.Offset or 0
     local baseWidth
     if profile.isPhone then
-        baseWidth = math.floor(profile.viewport.X * 0.85)
+        baseWidth = math.floor(profile.viewport.X * 0.75)
     elseif profile.isTablet then
-        baseWidth = math.floor(profile.viewport.X * 0.68)
+        baseWidth = math.floor(profile.viewport.X * 0.57)
     else
-        baseWidth = math.max(math.floor(profile.viewport.X * 0.42), 420)
+        baseWidth = math.max(math.floor(profile.viewport.X * 0.34), 360)
     end
     local baseHeight = profile.isPhone and 370 or 400
     local width = math.clamp(requestedWidth > 0 and requestedWidth or baseWidth, bounds.min.X, bounds.max.X)
