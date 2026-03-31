@@ -138,14 +138,14 @@ function Bypass:GetResponsiveWindowBounds(profile)
 
     local rawMaxWidth, minWidth
     if profile.isPhone then
-        rawMaxWidth = math.floor(profile.viewport.X * 0.78)
-        minWidth    = math.floor(profile.viewport.X * 0.72)
+        rawMaxWidth = math.floor(profile.viewport.X * 0.65)
+        minWidth    = math.floor(profile.viewport.X * 0.60)
     elseif profile.isTablet then
-        rawMaxWidth = math.floor(profile.viewport.X * 0.60)
-        minWidth    = math.floor(profile.viewport.X * 0.54)
+        rawMaxWidth = math.floor(profile.viewport.X * 0.48)
+        minWidth    = math.floor(profile.viewport.X * 0.43)
     else
-        rawMaxWidth = math.min(math.floor(profile.viewport.X * 0.42), 520)
-        minWidth    = math.max(math.floor(profile.viewport.X * 0.30), 340)
+        rawMaxWidth = math.min(math.floor(profile.viewport.X * 0.33), 440)
+        minWidth    = math.max(math.floor(profile.viewport.X * 0.22), 280)
     end
 
     return {
@@ -161,11 +161,11 @@ function Bypass:GetResponsiveWindowSize(requestedSize)
     local requestedHeight = requestedSize and requestedSize.Y.Offset or 0
     local baseWidth
     if profile.isPhone then
-        baseWidth = math.floor(profile.viewport.X * 0.75)
+        baseWidth = math.floor(profile.viewport.X * 0.63)
     elseif profile.isTablet then
-        baseWidth = math.floor(profile.viewport.X * 0.57)
+        baseWidth = math.floor(profile.viewport.X * 0.46)
     else
-        baseWidth = math.max(math.floor(profile.viewport.X * 0.34), 360)
+        baseWidth = math.max(math.floor(profile.viewport.X * 0.26), 290)
     end
     local baseHeight = profile.isPhone and 370 or 400
     local width = math.clamp(requestedWidth > 0 and requestedWidth or baseWidth, bounds.min.X, bounds.max.X)
@@ -452,12 +452,7 @@ function Bypass:Window(properties)
         if Cfg.SettingsTabOpen then Cfg.SettingsTabOpen() end
     end)
 
-    Items.FooterStatus = Bypass:Create("TextLabel", {
-        Parent = Items.Footer, Text = "Status: Premium", TextColor3 = themes.preset.subtext,
-        AnchorPoint = vec2(0, 0.5), Position = dim2(0, 8, 0.5, 0), Size = dim2(0, 150, 0, 14),
-        BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextSize = 9, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 5
-    })
-    Bypass:Themify(Items.FooterStatus, "subtext", "TextColor3")
+    -- FooterStatus removed: status is shown under avatar in header
 
     Items.PageHolder = Bypass:Create("Frame", { 
         Parent = Items.Window, Position = dim2(0, 0, 0, 56), Size = dim2(1, 0, 1, -96), 
@@ -492,8 +487,8 @@ function Bypass:Window(properties)
     Bypass:Themify(Items.Username, "text", "TextColor3")
 
     Items.Status = Bypass:Create("TextLabel", {
-        Parent = Items.Header, Text = "Status: Premium", TextColor3 = themes.preset.subtext,
-        AnchorPoint = vec2(1, 0), Position = dim2(1, -8, 0, 6), Size = dim2(0, 90, 0, 10),
+        Parent = Items.RightInfo, Text = "Status: Premium", TextColor3 = themes.preset.subtext,
+        AnchorPoint = vec2(1, 0), Position = dim2(1, -36, 0, 18), Size = dim2(0, 80, 0, 8),
         BackgroundTransparency = 1, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextSize = 8, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 6
     })
     Bypass:Themify(Items.Status, "subtext", "TextColor3")
@@ -515,7 +510,6 @@ function Bypass:Window(properties)
         if Dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
             local delta = input.Position - DragStart
             Items.Wrapper.Position = dim_offset(StartPos.X.Offset + delta.X, StartPos.Y.Offset + delta.Y)
-            Bypass:ClampFrameToViewport(Items.Wrapper)
         end
     end)
 
@@ -606,14 +600,14 @@ function Bypass:Tab(properties)
     if not Cfg.Hidden then
         local isPhone = Bypass:GetDeviceProfile().isPhone
         Items.Button = Bypass:Create("TextButton", { 
-            Parent = self.Items.TabHolder, Size = dim2(0, 0, 0, isPhone and 28 or 30), 
+            Parent = self.Items.TabHolder, Size = dim2(0, 0, 0, isPhone and 26 or 28), 
             AutomaticSize = Enum.AutomaticSize.X,
             BackgroundColor3 = themes.preset.tab_inactive,
             BackgroundTransparency = 0, 
             Text = "", AutoButtonColor = false, ZIndex = 5 
         })
-        Bypass:Create("UICorner", { Parent = Items.Button, CornerRadius = dim(0, 999) })
-        Bypass:Themify(Bypass:Create("UIStroke", { Parent = Items.Button, Color = themes.preset.outline, Thickness = 1 }), "outline", "Color")
+        Bypass:Create("UICorner", { Parent = Items.Button, CornerRadius = dim(0, 6) })
+        Bypass:Themify(Bypass:Create("UIStroke", { Parent = Items.Button, Color = themes.preset.accent, Thickness = 1.5 }), "accent", "Color")
         Bypass:Create("UIPadding", {
             Parent = Items.Button,
             PaddingLeft = dim(0, 10),
@@ -622,14 +616,10 @@ function Bypass:Tab(properties)
         
         Bypass:Create("UIGradient", {
             Parent = Items.Button,
-            Rotation = 25,
-            Transparency = NumberSequence.new({
-                NumberSequenceKeypoint.new(0, 0.2),
-                NumberSequenceKeypoint.new(1, 0.7)
-            }),
+            Rotation = 90,
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, rgb(255, 255, 255)),
-                ColorSequenceKeypoint.new(1, rgb(182, 138, 218))
+                ColorSequenceKeypoint.new(0, rgb(60, 40, 80)),
+                ColorSequenceKeypoint.new(1, rgb(35, 24, 50))
             })
         })
         
@@ -809,13 +799,15 @@ function Bypass:Toggle(properties)
 
     Items.Button = Bypass:Create("TextButton", { Parent = self.Items.Container, Size = dim2(1, 0, 0, 22), BackgroundTransparency = 1, Text = "" })
     
+    -- pill-style toggle track
+    local trackW, trackH = 28, 14
     Items.Checkbox = Bypass:Create("Frame", { 
-        Parent = Items.Button, AnchorPoint = vec2(0, 0.5), Position = dim2(0, 6, 0.5, 0), Size = dim2(0, 14, 0, 14), 
+        Parent = Items.Button, AnchorPoint = vec2(0, 0.5), Position = dim2(0, 4, 0.5, 0), Size = dim2(0, trackW, 0, trackH), 
         BackgroundColor3 = themes.preset.element, BorderSizePixel = 0 
     })
     Bypass:Themify(Items.Checkbox, "element", "BackgroundColor3")
-    Bypass:Create("UICorner", { Parent = Items.Checkbox, CornerRadius = dim(0, 3) })
-    AddSubtleGradient(Items.Checkbox, 90) -- ADDED: Gradient to the empty background box
+    Bypass:Create("UICorner", { Parent = Items.Checkbox, CornerRadius = dim(1, 0) })
+    Bypass:Themify(Bypass:Create("UIStroke", { Parent = Items.Checkbox, Color = themes.preset.outline, Thickness = 1 }), "outline", "Color")
 
     Items.CheckFill = Bypass:Create("Frame", {
         Parent = Items.Checkbox, Size = dim2(1, 0, 1, 0),
@@ -823,19 +815,34 @@ function Bypass:Toggle(properties)
         BackgroundTransparency = 1
     })
     Bypass:Themify(Items.CheckFill, "accent", "BackgroundColor3")
-    Bypass:Create("UICorner", { Parent = Items.CheckFill, CornerRadius = dim(0, 3) })
-    AddSubtleGradient(Items.CheckFill, 90) -- Toggle gradient on the filled box
+    Bypass:Create("UICorner", { Parent = Items.CheckFill, CornerRadius = dim(1, 0) })
+
+    -- knob
+    Items.Knob = Bypass:Create("Frame", {
+        Parent = Items.Checkbox, AnchorPoint = vec2(0.5, 0.5),
+        Position = dim2(0, trackH / 2, 0.5, 0),
+        Size = dim2(0, trackH - 4, 0, trackH - 4),
+        BackgroundColor3 = themes.preset.subtext, BorderSizePixel = 0, ZIndex = 3
+    })
+    Bypass:Themify(Items.Knob, "subtext", "BackgroundColor3")
+    Bypass:Create("UICorner", { Parent = Items.Knob, CornerRadius = dim(1, 0) })
 
     Items.Title = Bypass:Create("TextLabel", { 
-        Parent = Items.Button, Position = dim2(0, 30, 0.5, 0), AnchorPoint = vec2(0, 0.5), Size = dim2(1, -26, 1, 0), 
+        Parent = Items.Button, Position = dim2(0, 40, 0.5, 0), AnchorPoint = vec2(0, 0.5), Size = dim2(1, -36, 1, 0), 
         BackgroundTransparency = 1, Text = Cfg.Name, TextColor3 = themes.preset.subtext, TextSize = 13, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextXAlignment = Enum.TextXAlignment.Left 
     })
     Bypass:Themify(Items.Title, "subtext", "TextColor3")
 
+    local trackW = 28
+    local trackH = 14
     local State = false
     function Cfg.set(bool)
         State = bool
         Bypass:Tween(Items.CheckFill, {BackgroundTransparency = State and 0 or 1}, TweenInfo.new(0.2))
+        Bypass:Tween(Items.Knob, {
+            Position = dim2(0, State and (trackW - trackH / 2) or (trackH / 2), 0.5, 0),
+            BackgroundColor3 = State and themes.preset.accent or themes.preset.subtext
+        }, TweenInfo.new(0.2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out))
         Bypass:Tween(Items.Title, {TextColor3 = State and themes.preset.text or themes.preset.subtext}, TweenInfo.new(0.2))
         if Cfg.Flag then Flags[Cfg.Flag] = State end
         Cfg.Callback(State)
@@ -857,18 +864,31 @@ function Bypass:Button(properties)
     local Items = Cfg.Items
 
     Items.Button = Bypass:Create("TextButton", { 
-        Parent = self.Items.Container, Size = dim2(1, 0, 0, 30), BackgroundColor3 = themes.preset.element, 
-        Text = Cfg.Name, TextColor3 = themes.preset.subtext, TextSize = 13, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), AutoButtonColor = false 
+        Parent = self.Items.Container, Size = dim2(1, 0, 0, 28), BackgroundColor3 = themes.preset.control_dark, 
+        Text = "", AutoButtonColor = false 
     })
-    Bypass:Themify(Items.Button, "element", "BackgroundColor3")
-    Bypass:Themify(Items.Button, "subtext", "TextColor3")
-    Bypass:Create("UICorner", { Parent = Items.Button, CornerRadius = dim(0, 4) })
-    AddSubtleGradient(Items.Button, 90) -- Button Gradient
+    Bypass:Themify(Items.Button, "control_dark", "BackgroundColor3")
+    Bypass:Create("UICorner", { Parent = Items.Button, CornerRadius = dim(0, 6) })
+    Bypass:Themify(Bypass:Create("UIStroke", { Parent = Items.Button, Color = themes.preset.accent, Thickness = 1 }), "accent", "Color")
+    Bypass:Create("UIGradient", {
+        Parent = Items.Button, Rotation = 90,
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, rgb(80, 50, 110)),
+            ColorSequenceKeypoint.new(1, rgb(40, 25, 58))
+        })
+    })
+    Items.BtnLabel = Bypass:Create("TextLabel", {
+        Parent = Items.Button, Size = dim2(1, 0, 1, 0), BackgroundTransparency = 1,
+        Text = Cfg.Name, TextColor3 = themes.preset.text, TextSize = 12,
+        FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.SemiBold),
+        TextXAlignment = Enum.TextXAlignment.Center
+    })
+    Bypass:Themify(Items.BtnLabel, "text", "TextColor3")
 
     Items.Button.MouseButton1Click:Connect(function()
-        Bypass:Tween(Items.Button, {BackgroundColor3 = themes.preset.outline, TextColor3 = themes.preset.text}, TweenInfo.new(0.1))
-        task.wait(0.1)
-        Bypass:Tween(Items.Button, {BackgroundColor3 = themes.preset.element, TextColor3 = themes.preset.subtext}, TweenInfo.new(0.2))
+        Bypass:Tween(Items.Button, {BackgroundColor3 = themes.preset.accent}, TweenInfo.new(0.1))
+        task.wait(0.12)
+        Bypass:Tween(Items.Button, {BackgroundColor3 = themes.preset.control_dark}, TweenInfo.new(0.25))
         Cfg.Callback()
     end)
     return setmetatable(Cfg, Bypass)
@@ -994,11 +1014,18 @@ function Bypass:Dropdown(properties)
 
     Items.Main = Bypass:Create("TextButton", { 
         Parent = Items.Container, Position = dim2(0, 0, 0, 20), Size = dim2(1, 0, 0, 26), 
-        BackgroundColor3 = themes.preset.element, Text = "", AutoButtonColor = false 
+        BackgroundColor3 = themes.preset.control_dark, Text = "", AutoButtonColor = false 
     })
-    Bypass:Themify(Items.Main, "element", "BackgroundColor3")
-    Bypass:Create("UICorner", { Parent = Items.Main, CornerRadius = dim(0, 4) })
-    AddSubtleGradient(Items.Main, 90) -- Dropdown Main Gradient
+    Bypass:Themify(Items.Main, "control_dark", "BackgroundColor3")
+    Bypass:Create("UICorner", { Parent = Items.Main, CornerRadius = dim(0, 6) })
+    Bypass:Themify(Bypass:Create("UIStroke", { Parent = Items.Main, Color = themes.preset.outline, Thickness = 1 }), "outline", "Color")
+    Bypass:Create("UIGradient", {
+        Parent = Items.Main, Rotation = 90,
+        Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, rgb(60, 40, 80)),
+            ColorSequenceKeypoint.new(1, rgb(35, 22, 50))
+        })
+    })
 
     Items.SelectedText = Bypass:Create("TextLabel", { Parent = Items.Main, Position = dim2(0, 12, 0, 0), Size = dim2(1, -24, 1, 0), BackgroundTransparency = 1, Text = "...", TextColor3 = themes.preset.subtext, TextSize = 13, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextXAlignment = Enum.TextXAlignment.Left })
     Bypass:Themify(Items.SelectedText, "subtext", "TextColor3")
