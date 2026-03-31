@@ -799,15 +799,13 @@ function Bypass:Toggle(properties)
 
     Items.Button = Bypass:Create("TextButton", { Parent = self.Items.Container, Size = dim2(1, 0, 0, 22), BackgroundTransparency = 1, Text = "" })
     
-    -- pill-style toggle track
-    local trackW, trackH = 28, 14
     Items.Checkbox = Bypass:Create("Frame", { 
-        Parent = Items.Button, AnchorPoint = vec2(0, 0.5), Position = dim2(0, 4, 0.5, 0), Size = dim2(0, trackW, 0, trackH), 
+        Parent = Items.Button, AnchorPoint = vec2(0, 0.5), Position = dim2(0, 6, 0.5, 0), Size = dim2(0, 14, 0, 14), 
         BackgroundColor3 = themes.preset.element, BorderSizePixel = 0 
     })
     Bypass:Themify(Items.Checkbox, "element", "BackgroundColor3")
-    Bypass:Create("UICorner", { Parent = Items.Checkbox, CornerRadius = dim(1, 0) })
-    Bypass:Themify(Bypass:Create("UIStroke", { Parent = Items.Checkbox, Color = themes.preset.outline, Thickness = 1 }), "outline", "Color")
+    Bypass:Create("UICorner", { Parent = Items.Checkbox, CornerRadius = dim(0, 3) })
+    AddSubtleGradient(Items.Checkbox, 90)
 
     Items.CheckFill = Bypass:Create("Frame", {
         Parent = Items.Checkbox, Size = dim2(1, 0, 1, 0),
@@ -815,34 +813,19 @@ function Bypass:Toggle(properties)
         BackgroundTransparency = 1
     })
     Bypass:Themify(Items.CheckFill, "accent", "BackgroundColor3")
-    Bypass:Create("UICorner", { Parent = Items.CheckFill, CornerRadius = dim(1, 0) })
-
-    -- knob
-    Items.Knob = Bypass:Create("Frame", {
-        Parent = Items.Checkbox, AnchorPoint = vec2(0.5, 0.5),
-        Position = dim2(0, trackH / 2, 0.5, 0),
-        Size = dim2(0, trackH - 4, 0, trackH - 4),
-        BackgroundColor3 = themes.preset.subtext, BorderSizePixel = 0, ZIndex = 3
-    })
-    Bypass:Themify(Items.Knob, "subtext", "BackgroundColor3")
-    Bypass:Create("UICorner", { Parent = Items.Knob, CornerRadius = dim(1, 0) })
+    Bypass:Create("UICorner", { Parent = Items.CheckFill, CornerRadius = dim(0, 3) })
+    AddSubtleGradient(Items.CheckFill, 90)
 
     Items.Title = Bypass:Create("TextLabel", { 
-        Parent = Items.Button, Position = dim2(0, 40, 0.5, 0), AnchorPoint = vec2(0, 0.5), Size = dim2(1, -36, 1, 0), 
+        Parent = Items.Button, Position = dim2(0, 30, 0.5, 0), AnchorPoint = vec2(0, 0.5), Size = dim2(1, -26, 1, 0), 
         BackgroundTransparency = 1, Text = Cfg.Name, TextColor3 = themes.preset.subtext, TextSize = 13, FontFace = Font.new("rbxassetid://12187365364", Enum.FontWeight.Medium), TextXAlignment = Enum.TextXAlignment.Left 
     })
     Bypass:Themify(Items.Title, "subtext", "TextColor3")
 
-    local trackW = 28
-    local trackH = 14
     local State = false
     function Cfg.set(bool)
         State = bool
         Bypass:Tween(Items.CheckFill, {BackgroundTransparency = State and 0 or 1}, TweenInfo.new(0.2))
-        Bypass:Tween(Items.Knob, {
-            Position = dim2(0, State and (trackW - trackH / 2) or (trackH / 2), 0.5, 0),
-            BackgroundColor3 = State and themes.preset.accent or themes.preset.subtext
-        }, TweenInfo.new(0.2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out))
         Bypass:Tween(Items.Title, {TextColor3 = State and themes.preset.text or themes.preset.subtext}, TweenInfo.new(0.2))
         if Cfg.Flag then Flags[Cfg.Flag] = State end
         Cfg.Callback(State)
